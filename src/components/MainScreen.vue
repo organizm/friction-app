@@ -1,24 +1,36 @@
 <template>
-  <div class="hello">
-    <h1>{{ msgText }}</h1>
+  <div class="main-screen">
+    <Header :ports-list="state.portsList" @change="onPortSelected" />
+    <Recorder v-if="state.selectedPort" :port="state.selectedPort" />
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "@vue/composition-api";
+import { reactive, onMounted } from "@vue/composition-api";
 import SerialPort from "serialport";
+import Header from "./Header";
+import Recorder from "./Recorder";
 
 export default {
-  props: ["msg"],
-  setup({ msg }) {
-    const msgText = ref(msg);
+  components: { Recorder, Header },
+  setup() {
+    const state = reactive({
+      portsList: [],
+      selectedPort: ""
+    });
 
     onMounted(async () => {
-      const list = await SerialPort.list();
-      console.log(list);
+      state.portsList = await SerialPort.list();
+      console.log(state.portsList);
     });
+
+    function onPortSelected(port) {
+      state.selectedPort = port;
+    }
+
     return {
-      msgText
+      state,
+      onPortSelected
     };
   }
 };
@@ -39,5 +51,9 @@ li {
 }
 a {
   color: #42b983;
+}
+.main-screen {
+  background: #aaaaaa;
+  height: 100vh;
 }
 </style>
