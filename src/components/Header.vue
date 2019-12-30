@@ -1,7 +1,7 @@
 <template>
   <ul class="nav">
     <li class="nav-item">
-      <label for="ports">Ports</label>
+      <label for="ports">Port:</label>
     </li>
     <li class="nav-item select-wrapper">
       <select name="ports" id="ports" @change="onChange">
@@ -24,6 +24,7 @@ export default {
   props: ["portsList"],
   setup({ portsList }, context) {
     const state = reactive({ arduino: {} });
+
     function onChange({ target }) {
       context.emit("change", target.value);
       state.arduino = portsList.find(({ path }) => path === target.value);
