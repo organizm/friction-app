@@ -8,15 +8,25 @@
 >
 
 <script>
-import { onMounted } from "@vue/composition-api";
+import { onMounted, onUnmounted } from "@vue/composition-api";
 import SerialPort from "serialport";
+const Readline = require("@serialport/parser-readline");
+
 export default {
   name: "Recorder",
   props: ["port"],
   setup({ port }) {
+    let connection = {};
     onMounted(async () => {
-      console.log(port);
-      const connection = new SerialPort(port);
+      connection = new SerialPort(port);
+      const parser = connection.pipe(new Readline({ delimiter: "\r\n" }));
+      parser.on("data", console.log);
+    });
+
+    onUnmounted(() => {
+      if (connection.isOpen) {
+        connection.close();
+      }
     });
   }
 };
