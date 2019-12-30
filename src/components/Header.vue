@@ -11,19 +11,26 @@
         >
       </select>
     </li>
+    <li class="nav-item" v-if="!!state.arduino && !!state.arduino.manufacturer">
+      {{ state.arduino.manufacturer }}
+    </li>
   </ul>
 </template>
 
 <script>
+import { reactive } from "@vue/composition-api";
 export default {
   name: "Header",
   props: ["portsList"],
   setup({ portsList }, context) {
+    const state = reactive({ arduino: {} });
     function onChange({ target }) {
       context.emit("change", target.value);
+      state.arduino = portsList.find(({ path }) => path === target.value);
     }
 
     return {
+      state,
       onChange
     };
   }
