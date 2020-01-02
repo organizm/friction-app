@@ -21,7 +21,6 @@ export default {
 
     onMounted(async () => {
       state.portsList = await SerialPort.list();
-      console.log(state.portsList);
     });
 
     function onPortSelected(port) {
@@ -54,6 +53,6 @@ a {
 }
 .main-screen {
   background: #aaaaaa;
-  height: 100vh;
+  min-height: 100vh;
 }
 </style>
